@@ -1,14 +1,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-#if NETSTANDARD
-[assembly: AssemblyTitle(".NET Standard")]
-#endif
-
-#if NET6_0_OR_GREATER
-[assembly: AssemblyTitle(".NET 6.0 (or greater)")]
-#endif
-
+[assembly: AssemblyTitle(".NET Unified Platform")]
 [assembly: AssemblyVersion("#{SemanticVersionCore}#.0")]
 [assembly: AssemblyCopyright("Copyright (c) #{Year}#, Eben Roux")]
 [assembly: AssemblyProduct("Shuttle.Core.TransactionScope")]
