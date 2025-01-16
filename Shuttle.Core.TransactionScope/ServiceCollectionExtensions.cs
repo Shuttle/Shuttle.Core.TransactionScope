@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 
 namespace Shuttle.Core.TransactionScope;
@@ -14,12 +15,7 @@ public static class ServiceCollectionExtensions
 
         builder?.Invoke(transactionScopeBuilder);
 
-        services.AddOptions<TransactionScopeOptions>().Configure(options =>
-        {
-            options.IsolationLevel = transactionScopeBuilder.Options.IsolationLevel;
-            options.Timeout = transactionScopeBuilder.Options.Timeout;
-            options.Enabled = transactionScopeBuilder.Options.Enabled;
-        });
+        services.AddSingleton(Options.Create(transactionScopeBuilder.Options));
 
         if (services.Contains(ServiceDescriptor.Singleton<ITransactionScopeFactory, TransactionScopeFactory>()))
         {
