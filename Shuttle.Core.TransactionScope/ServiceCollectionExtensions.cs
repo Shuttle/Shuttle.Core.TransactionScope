@@ -15,7 +15,12 @@ public static class ServiceCollectionExtensions
 
         builder?.Invoke(transactionScopeBuilder);
 
-        services.AddSingleton(Options.Create(transactionScopeBuilder.Options));
+        services.AddOptions<TransactionScopeOptions>().Configure(options =>
+        {
+            options.IsolationLevel = transactionScopeBuilder.Options.IsolationLevel;
+            options.Timeout = transactionScopeBuilder.Options.Timeout;
+            options.Enabled = transactionScopeBuilder.Options.Enabled;
+        });
 
         if (services.Contains(ServiceDescriptor.Singleton<ITransactionScopeFactory, TransactionScopeFactory>()))
         {
