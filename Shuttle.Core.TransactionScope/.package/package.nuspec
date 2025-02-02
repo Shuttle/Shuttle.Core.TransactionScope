@@ -13,7 +13,7 @@
 		<repository type="git" url="https://github.com/Shuttle/Shuttle.Core.TransactionScope.git" />
 		<projectUrl>https://github.com/Shuttle/Shuttle.Core.TransactionScope</projectUrl>
 		<description>Provides transaction scope abstractions.</description>
-		<copyright>Copyright (c) 2024, Eben Roux</copyright>
+		<copyright>Copyright (c) 2025, Eben Roux</copyright>
 		<tags>transactionscope</tags>
 		<dependencies>
       <dependency id="Microsoft.Extensions.Configuration" version="8.0.0" />
