@@ -2,25 +2,22 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Core.Contract;
 
-namespace Shuttle.Core.TransactionScope
+namespace Shuttle.Core.TransactionScope;
+
+public class TransactionScopeBuilder
 {
-    public class TransactionScopeBuilder
+    private TransactionScopeOptions _transactionScopeOptions = new();
+
+    public TransactionScopeBuilder(IServiceCollection services)
     {
-        public TransactionScopeBuilder(IServiceCollection services)
-        {
-            Guard.AgainstNull(services, nameof(services));
-
-            Services = services;
-        }
-
-        private TransactionScopeOptions _transactionScopeOptions = new TransactionScopeOptions();
-
-        public TransactionScopeOptions Options
-        {
-            get => _transactionScopeOptions;
-            set => _transactionScopeOptions = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        public IServiceCollection Services { get; }
+        Services = Guard.AgainstNull(services);
     }
+
+    public TransactionScopeOptions Options
+    {
+        get => _transactionScopeOptions;
+        set => _transactionScopeOptions = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public IServiceCollection Services { get; }
 }

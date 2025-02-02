@@ -1,10 +1,9 @@
 using System;
 
-namespace Shuttle.Core.TransactionScope
+namespace Shuttle.Core.TransactionScope;
+
+public interface ITransactionScope : IDisposable
 {
-    public interface ITransactionScope : IDisposable
-    {
-        Guid Id { get; }
-        void Complete();
-    }
+    Guid Id { get; }
+    void Complete();
 }
