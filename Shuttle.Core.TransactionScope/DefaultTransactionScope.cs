@@ -1,34 +1,24 @@
-using System;
 using System.Transactions;
 
 namespace Shuttle.Core.TransactionScope;
 
-public class DefaultTransactionScope : ITransactionScope
+public class DefaultTransactionScope(IsolationLevel isolationLevel, TimeSpan timeout) : ITransactionScope
 {
-    private readonly bool _ignore;
+    private readonly bool _ignore = Transaction.Current != null;
 
-    private readonly System.Transactions.TransactionScope _scope;
-
-    public DefaultTransactionScope(IsolationLevel isolationLevel, TimeSpan timeout)
-    {
-        Id = Guid.NewGuid();
-
-        _ignore = Transaction.Current != null;
-
-        _scope = new(TransactionScopeOption.RequiresNew,
-            new TransactionOptions
-            {
-                IsolationLevel = isolationLevel,
-                Timeout = timeout
-            },
-            TransactionScopeAsyncFlowOption.Enabled);
-    }
+    private readonly System.Transactions.TransactionScope _scope = new(TransactionScopeOption.RequiresNew,
+        new TransactionOptions
+        {
+            IsolationLevel = isolationLevel,
+            Timeout = timeout
+        },
+        TransactionScopeAsyncFlowOption.Enabled);
 
     public void Dispose()
     {
         try
         {
-            _scope?.Dispose();
+            _scope.Dispose();
         }
         catch
         {
@@ -36,7 +26,7 @@ public class DefaultTransactionScope : ITransactionScope
         }
     }
 
-    public Guid Id { get; }
+    public Guid Id { get; } = Guid.NewGuid();
 
     public void Complete()
     {
@@ -45,6 +35,6 @@ public class DefaultTransactionScope : ITransactionScope
             return;
         }
 
-        _scope?.Complete();
+        _scope.Complete();
     }
 }

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Transactions;
+﻿using System.Transactions;
 using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 
 namespace Shuttle.Core.TransactionScope;
 
-public class TransactionScopeFactory : ITransactionScopeFactory
+public class TransactionScopeFactory(IOptions<TransactionScopeOptions> options) : ITransactionScopeFactory
 {
-    private readonly TransactionScopeOptions _options;
-
-    public TransactionScopeFactory(IOptions<TransactionScopeOptions> options)
-    {
-        _options = Guard.AgainstNull(Guard.AgainstNull(options).Value);
-    }
+    private readonly TransactionScopeOptions _options = Guard.AgainstNull(Guard.AgainstNull(options).Value);
 
     public ITransactionScope Create()
     {

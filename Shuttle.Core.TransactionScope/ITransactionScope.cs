@@ -1,5 +1,3 @@
-using System;
-
 namespace Shuttle.Core.TransactionScope;
 
 public interface ITransactionScope : IDisposable
