@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shuttle.Core.Contract;
 
 namespace Shuttle.Core.TransactionScope;
@@ -11,23 +12,18 @@ public static class ServiceCollectionExtensions
         {
             Guard.AgainstNull(services);
 
+            services.AddOptions<TransactionScopeOptions>();
+
             var transactionScopeBuilder = new TransactionScopeBuilder(services);
 
             builder?.Invoke(transactionScopeBuilder);
-
-            services.AddOptions<TransactionScopeOptions>().Configure(options =>
-            {
-                options.IsolationLevel = transactionScopeBuilder.Options.IsolationLevel;
-                options.Timeout = transactionScopeBuilder.Options.Timeout;
-                options.Enabled = transactionScopeBuilder.Options.Enabled;
-            });
 
             if (services.Contains(ServiceDescriptor.Singleton<ITransactionScopeFactory, TransactionScopeFactory>()))
             {
                 throw new InvalidOperationException(Resources.AddTransactionScopeFactoryException);
             }
 
-            services.AddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
+            services.TryAddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
 
             return services;
         }

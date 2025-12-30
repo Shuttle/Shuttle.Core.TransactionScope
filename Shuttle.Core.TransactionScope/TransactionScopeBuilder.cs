@@ -5,11 +5,11 @@ namespace Shuttle.Core.TransactionScope;
 
 public class TransactionScopeBuilder(IServiceCollection services)
 {
-    public TransactionScopeOptions Options
+    public TransactionScopeBuilder Configure(Action<TransactionScopeOptions> configure)
     {
-        get;
-        set => field = value ?? throw new ArgumentNullException(nameof(value));
-    } = new();
+        Services.Configure(configure);
+        return this;
+    }
 
     public IServiceCollection Services { get; } = Guard.AgainstNull(services);
 }
