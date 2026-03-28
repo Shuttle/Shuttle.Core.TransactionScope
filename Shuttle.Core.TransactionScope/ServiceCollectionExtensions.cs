@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Shuttle.Core.Contract;
 
 namespace Shuttle.Core.TransactionScope;
 
@@ -8,15 +7,9 @@ public static class ServiceCollectionExtensions
 {
     extension(IServiceCollection services)
     {
-        public IServiceCollection AddTransactionScope(Action<TransactionScopeBuilder>? builder = null)
+        public IServiceCollection AddTransactionScope()
         {
-            Guard.AgainstNull(services);
-
-            services.AddOptions<TransactionScopeOptions>();
-
-            var transactionScopeBuilder = new TransactionScopeBuilder(services);
-
-            builder?.Invoke(transactionScopeBuilder);
+            ArgumentNullException.ThrowIfNull(services);
 
             if (services.Contains(ServiceDescriptor.Singleton<ITransactionScopeFactory, TransactionScopeFactory>()))
             {
@@ -24,6 +17,17 @@ public static class ServiceCollectionExtensions
             }
 
             services.TryAddSingleton<ITransactionScopeFactory, TransactionScopeFactory>();
+
+            return services;
+        }
+
+        public IServiceCollection AddTransactionScope(Action<TransactionScopeOptions> configureOptions)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configureOptions);
+
+            services.AddTransactionScope();
+            services.Configure(configureOptions);
 
             return services;
         }
